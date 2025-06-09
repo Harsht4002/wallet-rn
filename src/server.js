@@ -15,7 +15,7 @@ app.use(express.json());
 app.use("/api/transactions", transactionroutes);
 const PORT = process.env.PORT;
 
-app.get("/health", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.status(200).json({ status: "Ok" });
 });
 
