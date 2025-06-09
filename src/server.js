@@ -3,15 +3,21 @@ import dotenv from "dotenv";
 import { sql } from "./config/db.js";
 import rateLimiter from "./middleware/RateLimiter.js";
 import transactionroutes from "./routes/transactionsroutes.js";
+import job from "./config/cron.js";
 
 dotenv.config();
 
 const app = express();
+if (process.env.NODE_ENV === "production") job.start(); // Start the cron job only in production
 
 app.use(rateLimiter);
 app.use(express.json());
 app.use("/api/transactions", transactionroutes);
 const PORT = process.env.PORT;
+
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "Ok" });
+});
 
 async function initdb() {
   try {
